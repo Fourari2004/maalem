@@ -1,0 +1,38 @@
+
+    ╔═══════════════════════════════════════════╗
+    ║                                           ║
+    ║    🚀  LANCER LE SITE EN 1 CLIC  🚀      ║
+    ║                                           ║
+    ╚═══════════════════════════════════════════╝
+
+
+    Double-cliquez sur:  LANCER_TOUT.bat
+
+
+    ✨ C'est tout! Le script fait le reste:
+
+       ✓ Lance le backend
+       ✓ Lance le frontend  
+       ✓ Configure pour mobile
+       ✓ Ouvre le navigateur
+
+
+    📱 Pour accéder depuis votre téléphone:
+
+       → L'URL sera affichée dans le script
+       → Exemple: http://192.168.68.58:5173
+       → Assurez-vous d'être sur le MÊME WiFi
+
+
+    📚 Plus d'infos:
+
+       LANCEMENT_1_CLIC.txt
+       README_DEMARRAGE_RAPIDE.txt
+
+
+    ═══════════════════════════════════════════
+
+    💡 ASTUCE: Créez un raccourci de 
+       LANCER_TOUT.bat sur votre bureau!
+
+    ═══════════════════════════════════════════

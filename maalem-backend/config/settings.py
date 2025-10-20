@@ -14,7 +14,14 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+# Modifiez cette ligne pour autoriser votre IP publique
+# Supporte localhost, IP locale, et domaines ngrok
+ALLOWED_HOSTS = [host.strip() for host in os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1,192.168.68.58').split(',')]
+# Autoriser tous les domaines ngrok (uniquement pour développement)
+if DEBUG:
+    ALLOWED_HOSTS += ['.ngrok-free.app', '.ngrok.io', '.ngrok.app']
+    # En mode debug, on peut aussi autoriser tous les hosts (à désactiver en production!)
+    # ALLOWED_HOSTS = ['*']  # Décommenter seulement pour debug
 
 # Application definition
 INSTALLED_APPS = [
@@ -147,16 +154,60 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+# Custom user model
+AUTH_USER_MODEL = 'users.User'
+
+# Use default authentication backends
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 # JWT Settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
+    # Configure to use email instead of username
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
 }
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
+# Modifiez cette ligne pour autoriser votre frontend
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://localhost:5185,http://192.168.68.58:5173,http://192.168.68.58:5185').split(',')]
+
+# Additional CORS settings for proper functionality
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+# En mode DEBUG, autoriser tous les domaines ngrok
+if DEBUG:
+    CORS_ALLOW_ALL_ORIGINS = False  # Gardons le contrôle
+    # Ajouter un pattern pour accepter ngrok
+    import re
+    CORS_ALLOWED_ORIGIN_REGEXES = [
+        r"^https://.*\.ngrok-free\.app$",
+        r"^https://.*\.ngrok\.io$",
+        r"^https://.*\.ngrok\.app$",
+    ]
 
 # Channels configuration
 CHANNEL_LAYERS = {

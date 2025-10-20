@@ -11,8 +11,11 @@ class NotificationSerializer(serializers.ModelSerializer):
         read_only_fields = ['sender']
 
     def get_sender(self, obj):
-        return {
-            'id': obj.sender.id,
-            'username': obj.sender.username,
-            'profile_picture': obj.sender.profile_picture.url if obj.sender.profile_picture else None
-        }
+        if obj.sender:
+            return {
+                'id': obj.sender.id,
+                'username': obj.sender.username,
+                'first_name': obj.sender.first_name,
+                'profile_picture': obj.sender.profile_picture.url if obj.sender.profile_picture else None
+            }
+        return None

@@ -23,6 +23,8 @@ class PostSerializer(serializers.ModelSerializer):
     author = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     comments_count = serializers.SerializerMethodField()
+    shares_count = serializers.SerializerMethodField()
+    views_count = serializers.SerializerMethodField()
     is_liked = serializers.SerializerMethodField()
     is_saved = serializers.SerializerMethodField()
     comments = CommentSerializer(many=True, read_only=True)
@@ -31,18 +33,26 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'author', 'title', 'description', 'created_at', 
                  'updated_at', 'image', 'category', 'location', 'latitude', 
-                 'longitude', 'likes_count', 'comments_count', 'is_liked', 
-                 'is_saved', 'comments']
+                 'longitude', 'likes_count', 'comments_count', 'shares_count',
+                 'views_count', 'is_liked', 'is_saved', 'comments']
         read_only_fields = ['author', 'likes_count', 'comments_count', 
-                          'is_liked', 'is_saved']
+                          'shares_count', 'views_count', 'is_liked', 'is_saved']
 
     def get_author(self, obj):
-        return {
+        author_data = {
             'id': obj.author.id,
             'username': obj.author.username,
             'profile_picture': obj.author.profile_picture.url if obj.author.profile_picture else None,
-            'user_type': obj.author.user_type
+            'user_type': obj.author.user_type,
+            'verified': getattr(obj.author, 'verified', False)
         }
+        # Add specialty for artisans
+        if obj.author.user_type == 'artisan' and hasattr(obj.author, 'specialty'):
+            author_data['specialty'] = obj.author.specialty
+        else:
+            author_data['specialty'] = ''
+        
+        return author_data
 
     def get_likes_count(self, obj):
         return obj.likes.count()
@@ -50,15 +60,21 @@ class PostSerializer(serializers.ModelSerializer):
     def get_comments_count(self, obj):
         return obj.comments.count()
 
+    def get_shares_count(self, obj):
+        return obj.shares.count()
+
+    def get_views_count(self, obj):
+        return obj.views.count()
+
     def get_is_liked(self, obj):
         request = self.context.get('request')
-        if request and request.user.is_authenticated:
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
             return obj.likes.filter(user=request.user).exists()
         return False
 
     def get_is_saved(self, obj):
         request = self.context.get('request')
-        if request and request.user.is_authenticated:
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
             return obj.saves.filter(user=request.user).exists()
         return False
 

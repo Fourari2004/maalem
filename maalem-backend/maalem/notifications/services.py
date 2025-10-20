@@ -67,3 +67,35 @@ class NotificationService:
         Récupère le nombre de notifications non lues
         """
         return Notification.objects.filter(recipient=user, is_read=False).count()
+
+    @staticmethod
+    def create_welcome_notification(recipient, text):
+        """
+        Crée une notification de bienvenue (notification système sans sender)
+        """
+        notification = Notification.objects.create(
+            recipient=recipient,
+            sender=None,  # Pas d'expéditeur pour les notifications système
+            notification_type='welcome',
+            text=text,
+            content_type=None,  # Pas d'objet lié pour les notifications de bienvenue
+            object_id=None
+        )
+
+        # Envoyer la notification en temps réel via WebSocket
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f"notifications_{recipient.id}",
+            {
+                "type": "send_notification",
+                "notification": {
+                    "id": notification.id,
+                    "type": 'welcome',
+                    "text": text,
+                    "sender": None,  # Notification système
+                    "created_at": notification.created_at.isoformat()
+                }
+            }
+        )
+
+        return notification

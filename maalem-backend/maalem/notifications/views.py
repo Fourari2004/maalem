@@ -23,3 +23,9 @@ class NotificationViewSet(viewsets.ModelViewSet):
         notification.is_read = True
         notification.save()
         return Response({'status': 'notification marked as read'})
+    
+    @action(detail=False, methods=['delete'])
+    def delete_all(self, request):
+        count = self.get_queryset().count()
+        self.get_queryset().delete()
+        return Response({'status': f'{count} notifications deleted'})

@@ -1,0 +1,176 @@
+╔══════════════════════════════════════════════════════════════════╗
+║          ✅ CHECKLIST DE VÉRIFICATION - MAALEM PLATFORM          ║
+║                      Date: 2025-10-19                            ║
+╚══════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 1: DÉMARRAGE DE L'APPLICATION                             │
+└──────────────────────────────────────────────────────────────────┘
+
+[ ] Backend lancé sur http://0.0.0.0:8000
+    → cd maalem-backend
+    → python manage.py runserver 0.0.0.0:8000
+
+[ ] Frontend lancé sur http://localhost:5173
+    → cd maalem-frontend
+    → npm run dev
+
+[ ] OU utilisez: LANCER_TOUT.bat
+
+[ ] Aucune erreur dans les consoles
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 2: VÉRIFICATION ACCESSIBILITÉ (Labels)                    │
+└──────────────────────────────────────────────────────────────────┘
+
+[ ] Ouvrir Chrome
+[ ] Appuyer sur F12 (DevTools)
+[ ] Aller dans l'onglet "Console"
+[ ] Cliquer sur "Connexion/Inscription"
+[ ] Choisir "Artisan"
+
+VÉRIFICATIONS:
+[ ] Aucun avertissement: "Incorrect use of <label for=..."
+[ ] Aucun message: "The label's for attribute doesn't match..."
+[ ] Console propre (seulement logs normaux)
+
+✅ Si aucun avertissement → SUCCÈS!
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 3: TEST INSCRIPTION + AUTO-LOGIN                          │
+└──────────────────────────────────────────────────────────────────┘
+
+[ ] Remplir le formulaire d'inscription artisan:
+    
+    Email:        ______________________@example.com
+    Mot de passe: ________________________
+    Confirmation: ________________________
+    Prénom:       ________________________
+    Nom:          ________________________
+    Téléphone:    +212 6__ __ __ __ __
+    Adresse:      ________________________
+    Ville:        [ Sélectionner dans liste ]
+    Spécialité:   [ Sélectionner dans liste ]
+    Expérience:   _____ (optionnel)
+    Description:  ________________________ (optionnel)
+
+[ ] Cliquer "Créer mon compte artisan"
+
+VÉRIFICATIONS ATTENDUES:
+[ ] Toast vert apparaît: "🎉 Inscription réussie!"
+[ ] Message: "Vous êtes maintenant connecté. Bienvenue sur Maalem!"
+[ ] Redirection automatique vers la page d'accueil
+[ ] Nom d'utilisateur visible en haut à droite
+[ ] PAS de demande de connexion manuelle
+
+✅ Si tous cochés → AUTO-LOGIN FONCTIONNE!
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 4: VÉRIFICATION NOTIFICATION DE BIENVENUE                 │
+└──────────────────────────────────────────────────────────────────┘
+
+[ ] Après inscription réussie, regarder en haut à droite
+[ ] Icône de cloche (🔔) visible
+[ ] Badge rouge avec "1" sur la cloche
+
+[ ] Cliquer sur l'icône 🔔
+
+VÉRIFICATIONS DANS LE PANNEAU NOTIFICATIONS:
+[ ] Une notification de bienvenue est visible
+[ ] Type: "welcome" (icône différente des autres)
+[ ] Pas d'expéditeur (notification système)
+[ ] Texte commence par: "Bienvenue sur Maalem, [Votre Prénom]! 👋"
+[ ] Message différent selon le type:
+    • Artisan: "Félicitations pour votre inscription en tant qu'artisan..."
+    • Client:  "Nous sommes ravis de vous compter parmi nous..."
+
+✅ Si notification visible → SYSTÈME FONCTIONNE!
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 5: TEST MESSAGE D'ERREUR DYNAMIQUE                        │
+└──────────────────────────────────────────────────────────────────┘
+
+[ ] Arrêter le serveur backend (Ctrl+C dans terminal)
+[ ] Se déconnecter du compte (si connecté)
+[ ] Essayer de se connecter ou s'inscrire
+
+VÉRIFICATIONS:
+[ ] Message d'erreur s'affiche
+[ ] Lit le message d'erreur complet
+
+    Le message doit contenir l'URL CORRECTE:
+    • Sur localhost: "...sur http://localhost:8000..."
+    • Sur réseau local: "...sur http://192.168.68.58:8000..."
+    
+[ ] Le message N'affiche PAS toujours "localhost:8000" si vous êtes 
+    sur une autre IP
+
+✅ Si URL correcte affichée → MESSAGE DYNAMIQUE FONCTIONNE!
+
+[ ] Relancer le backend pour continuer les tests
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│ ÉTAPE 6: TEST SUR TÉLÉPHONE (Bonus)                             │
+└──────────────────────────────────────────────────────────────────┘
+
+[ ] Téléphone connecté au même WiFi que l'ordinateur
+[ ] Ouvrir navigateur sur téléphone
+[ ] Aller à: http://192.168.68.58:5173
+
+[ ] Tester inscription sur mobile:
+    [ ] Formulaire s'affiche correctement
+    [ ] Listes déroulantes (Ville/Spécialité) fonctionnent
+    [ ] Auto-login fonctionne
+    [ ] Notification de bienvenue apparaît
+
+✅ Si tout fonctionne sur mobile → RÉSEAU LOCAL OK!
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│ RÉSUMÉ FINAL                                                     │
+└──────────────────────────────────────────────────────────────────┘
+
+TOUS LES TESTS RÉUSSIS?
+
+[ ] ✅ Accessibilité: Pas d'avertissements labels
+[ ] ✅ Auto-login: Connexion automatique après inscription
+[ ] ✅ Notification: Message de bienvenue reçu
+[ ] ✅ Message erreur: URL dynamique affichée
+[ ] ✅ Mobile: Fonctionne sur réseau local
+
+┌──────────────────────────────────────────────────────────────────┐
+│ PROBLÈMES RENCONTRÉS?                                            │
+└──────────────────────────────────────────────────────────────────┘
+
+❌ Pas de notification de bienvenue?
+   → Voir: GUIDE_TEST_NOTIFICATIONS.md
+   → Vérifier: Serveur backend redémarré complètement
+   → Tester: Django Admin → Notifications
+
+❌ Avertissements labels persistent?
+   → Vérifier: AuthModal.jsx lignes 570 et 626
+   → Confirmer: id="city" et id="specialty" présents
+   → Tester: Ctrl+F5 (rafraîchir cache navigateur)
+
+❌ Message erreur toujours "localhost:8000"?
+   → Vérifier: auth.js ligne 189
+   → Confirmer: Utilise ${serverUrl} et non hardcodé
+   → Tester: Ctrl+F5 (rafraîchir cache)
+
+❌ Autres problèmes?
+   → Consulter: PROBLEMES_COURANTS.md
+   → Consulter: VERIFICATION_FIXES.md
+
+
+═══════════════════════════════════════════════════════════════════
+
+        🎉 TOUTES LES CORRECTIONS SONT EN PLACE! 🎉
+        
+        Bonne chance avec vos tests! 
+        
+═══════════════════════════════════════════════════════════════════

@@ -1,0 +1,62 @@
+╔══════════════════════════════════════════════════════════════╗
+║        ACCÈS AU SITE DEPUIS VOTRE TÉLÉPHONE - RAPIDE        ║
+╚══════════════════════════════════════════════════════════════╝
+
+✅ LES SERVEURS SONT MAINTENANT CONFIGURÉS ET EN COURS D'EXÉCUTION!
+
+┌──────────────────────────────────────────────────────────────┐
+│ SUR VOTRE TÉLÉPHONE:                                         │
+└──────────────────────────────────────────────────────────────┘
+
+1. Connectez-vous au MÊME réseau WiFi que votre ordinateur
+
+2. Ouvrez le navigateur de votre téléphone
+
+3. Allez à cette adresse:
+   
+   ➜  http://192.168.68.58:5173
+   
+4. Vous pouvez maintenant vous connecter avec:
+   - Email: said@gmail.com
+   - Mot de passe: votre mot de passe
+
+┌──────────────────────────────────────────────────────────────┐
+│ POUR LES PROCHAINES FOIS:                                    │
+└──────────────────────────────────────────────────────────────┘
+
+Option 1 - Double-clic:
+   ✓ Double-cliquez sur "start_mobile.bat"
+
+Option 2 - Ligne de commande:
+   Terminal 1 (Backend):
+   cd maalem-backend
+   python manage.py runserver 0.0.0.0:8000
+
+   Terminal 2 (Frontend):
+   cd maalem-frontend
+   copy .env.mobile .env
+   npm run dev -- --host
+
+┌──────────────────────────────────────────────────────────────┐
+│ SI ÇA NE FONCTIONNE PAS:                                     │
+└──────────────────────────────────────────────────────────────┘
+
+1. Vérifiez que téléphone et ordinateur sont sur le MÊME WiFi
+2. Vérifiez que les deux serveurs sont lancés (voir ci-dessus)
+3. Configurez le pare-feu Windows (voir ACCES_MOBILE.md)
+
+┌──────────────────────────────────────────────────────────────┐
+│ ADRESSES D'ACCÈS:                                            │
+└──────────────────────────────────────────────────────────────┘
+
+Sur cet ordinateur:
+   Frontend: http://localhost:5173
+   Backend:  http://localhost:8000
+
+Depuis votre téléphone (même WiFi):
+   Frontend: http://192.168.68.58:5173
+   Backend:  http://192.168.68.58:8000
+
+═══════════════════════════════════════════════════════════════
+Pour plus de détails, voir le fichier: ACCES_MOBILE.md
+═══════════════════════════════════════════════════════════════

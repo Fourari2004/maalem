@@ -12,18 +12,20 @@ class Notification(models.Model):
         ('message', 'Message'),
         ('new_post', 'New Post'),
         ('follow', 'Follow'),
+        ('welcome', 'Welcome'),
+        ('system', 'System'),
     )
 
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications', null=True, blank=True)
     notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
-    text = models.CharField(max_length=255)
+    text = models.TextField()  # Changed from CharField to TextField for longer messages
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     
-    # Pour lier la notification à n'importe quel modèle
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
+    # Pour lier la notification à n'importe quel modèle (optionnel pour les notifications système)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
     class Meta:
